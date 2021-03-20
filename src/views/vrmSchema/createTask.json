@@ -1,0 +1,125 @@
+{
+  "titleLabel": {
+    "component": "VrmTextDisplay",
+    "props": {
+      "text": "Title",
+      "type": "formLabel"
+    }
+  },
+  "title": {
+    "component": "VrmInput",
+    "props": {
+      "type": "text",
+      "classes": [
+        "neu",
+        "intruded",
+        "small",
+        "margin-medium",
+        "padding-wide",
+        "font-medium"
+      ]
+    }
+  },
+  "descriptionLabel": {
+    "component": "VrmTextDisplay",
+    "props": {
+      "text": "Description",
+      "type": "formLabel"
+    }
+  },
+  "description": {
+    "component": "VrmTextArea",
+    "props": {
+      "type": "text",
+      "classes": [
+        "neu",
+        "intruded",
+        "small",
+        "margin-medium",
+        "padding-wide",
+        "font-medium"
+      ]
+    }
+  },
+  "sharedUsersLabel": {
+    "component": "VrmTextDisplay",
+    "props": {
+      "text": "Share",
+      "type": "formLabel"
+    }
+  },
+  "shareData": {
+    "component": "VrmHorizontalLayout",
+    "props": {
+      "flexRatio": "three",
+      "classes": ["reverse-wrap"]
+    },
+    "users": {
+      "search": {
+        "component": "VrmSearch",
+        "props": {
+          "placeholder": "Search for users",
+          "classes": [
+            "neu",
+            "intruded",
+            "small",
+            "margin-medium",
+            "padding-wide",
+            "font-medium"
+          ]
+        }
+      },
+      "shared": [
+        {
+          "component": "VrmTags",
+          "props": {
+            "renderKey": "username",
+            "classes": [
+              "neu",
+              "intruded",
+              "small",
+              "margin-medium",
+              "padding-wide",
+              "font-small",
+              "full-width"
+            ]
+          }
+        }
+      ]
+    },
+    "accessType": {
+      "component": "VrmDropdown",
+      "props": {
+        "listValues": ["Read", "Edit"],
+        "placeholder": "Select access type",
+        "classes": [
+          "neu",
+          "extruded",
+          "clickable",
+          "tiny",
+          "margin-medium",
+          "padding-narrow",
+          "font-medium"
+        ]
+      }
+    }
+  },
+  "action:create": {
+    "component": "VrmButton",
+    "props": {
+      "label": "Create",
+      "classes": [
+        "colorful",
+        "neu",
+        "extruded",
+        "clickable",
+        "small",
+        "wide",
+        "margin-medium",
+        "padding-medium",
+        "justify-center",
+        "font-large"
+      ]
+    }
+  }
+}

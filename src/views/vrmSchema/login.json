@@ -1,0 +1,69 @@
+{
+  "username": {
+    "component": "VrmInput",
+    "props": {
+      "placeholder": "Username",
+      "type": "text",
+      "classes": [
+        "neu",
+        "intruded",
+        "small",
+        "margin-medium",
+        "padding-wide",
+        "full-width",
+        "font-medium"
+      ]
+    }
+  },
+  "password": {
+    "component": "VrmInput",
+    "props": {
+      "placeholder": "Password",
+      "type": "password",
+      "classes": [
+        "neu",
+        "intruded",
+        "small",
+        "margin-medium",
+        "padding-wide",
+        "full-width",
+        "font-medium"
+      ]
+    }
+  },
+  "rememberMe": {
+    "component": "VrmCheckbox",
+    "props": {
+      "label": "Remember me",
+      "type": "checkbox",
+      "classes": [
+        "neu",
+        "extruded",
+        "clickable",
+        "tiny",
+        "margin-medium",
+        "padding-medium",
+        "justify-end",
+        "font-small"
+      ]
+    }
+  },
+  "action:login": {
+    "component": "VrmButton",
+    "props": {
+      "label": "Log in",
+      "classes": [
+        "colorful",
+        "neu",
+        "extruded",
+        "clickable",
+        "small",
+        "wide",
+        "margin-medium",
+        "padding-medium",
+        "justify-center",
+        "font-large"
+      ]
+    }
+  }
+}

@@ -1,0 +1,48 @@
+$background-color: #eaeafa;
+$text-color: #335;
+$main-accent--background-color: #94a;
+$main-accent--text-color: #335;
+$box-shadow--light: #fff;
+$box-shadow--dark: #c7c7d5;
+.neu {
+  background-color: $background-color;
+  color: $text-color;
+  .colorful {
+    background-color: $main-accent--background-color;
+    color: $main-accent--text-color;
+  }
+  .extruded {
+    .large {
+      background: $background-color;
+      box-shadow:  20px 20px 60px $box-shadow--dark, -20px -20px 60px $box-shadow--light;
+      border-radius: 50px;
+    }
+    .medium {
+      border-radius: 18px;
+      background: $background-color;
+      box-shadow:  10px 10px 19px $box-shadow--dark, -10px -10px 19px $box-shadow--light;
+    }
+    .small {
+      border-radius: 12px;
+      background: $background-color;
+      box-shadow:  4px 4px 7px $box-shadow--dark, -4px -4px 7px $box-shadow--light;
+    }
+  }
+  .intruded {
+    .large {
+      background: $background-color;
+      box-shadow: inset 20px 20px 60px $box-shadow--dark, inset -20px -20px 60px $box-shadow--light;
+      border-radius: 50px;
+    }
+    .medium {
+      border-radius: 18px;
+      background: $background-color;
+      box-shadow: inset 10px 10px 19px $box-shadow--dark, inset -10px -10px 19px $box-shadow--light;
+    }
+    .small {
+      border-radius: 12px;
+      background: $background-color;
+      box-shadow: inset 4px 4px 7px $box-shadow--dark, inset -4px -4px 7px $box-shadow--light;
+    }
+  }
+}
