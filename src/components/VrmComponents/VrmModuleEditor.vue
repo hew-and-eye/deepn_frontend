@@ -71,6 +71,7 @@ export default {
       this.$emit("vrmUpdate", event.target.innerHTML);
     },
     toggleView() {
+      console.log(this.convertHTMLStringToTemplate(this.data));
       this.previewMode = !this.previewMode;
     },
     convertHTMLStringToTemplate(htmlString) {

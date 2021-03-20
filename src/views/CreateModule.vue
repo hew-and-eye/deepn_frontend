@@ -128,7 +128,7 @@ export default {
         OPEN_DOUBLE_BRACE,
         `{{${key}}}`
       );
-      const dependencies = { [key]: suggestion.templates[latestVersion] };
+      const dependencies = { [key]: templateToValue(suggestion) };
       this.newModule.addCommit({
         template: this.convertTemplateToHTMLString({ template, dependencies }),
         dependencies: { ...this.newModule.value.dependencies, ...dependencies },

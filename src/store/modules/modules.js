@@ -17,7 +17,7 @@ export default {
       state.modules.addCommit(value);
     },
     setNewModule(state, value) {
-      state.newModule.addCommit(value);
+      state.newModule = new StoreObject(value);
     },
   },
   actions: {
@@ -31,6 +31,14 @@ export default {
         templates: JSON.parse(d.templates),
       }));
       parsedData = Object.values(parsedData).reduce((acc, val) => {
+        val.dependencies = Object.entries(val.dependencies).reduce(
+          (acc, [key, val]) => {
+            acc[key] = val["S"];
+            return acc;
+          },
+          {}
+        );
+        console.log(val.dependencies);
         acc[val.id] = val;
         return acc;
       }, {});
@@ -45,6 +53,7 @@ export default {
       const response = await moduleService.create({ data });
       data.id = response.data.result.id;
       commit("setModules", data);
+      commit("setNewModule", {});
     },
   },
 };
