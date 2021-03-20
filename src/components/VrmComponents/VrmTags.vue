@@ -1,7 +1,7 @@
 <template lang="pug">
 .vrm-tags.vrm-component(:class="{ hidden: !data }")
   .vrm-tag.neu.extruded.small.padding-medium(v-for="tag in data")
-    | {{renderText(tag)}} {{!!data}}
+    | {{renderText(tag)}}
     .x-button
 
 </template>

@@ -7,7 +7,6 @@
     :placeholder="placeholder"
     :type="type"
   )
-  div {{ searchResults}}
   .results(v-if="searchResults && searchResults.length")
     li(v-for="result in searchResults" @click="emitResultSelection(result)") {{ result.username }}
 </template>
