@@ -2,7 +2,7 @@
 #app
   .app-header.neu
     logo.neu.extruded.small
-    .app-title Teamo
+    .app-title Dependeco
   content-wrapper(:layout="navbarPosition")
     router-view(v-slot:main)
     template(v-slot:nav v-if="isLoggedIn")

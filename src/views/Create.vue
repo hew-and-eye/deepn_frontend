@@ -11,7 +11,7 @@
       .entry
         | Recurring Task
       .description
-        | Send scheduled notifications via Teamo or WhatsApp.
+        | Send scheduled notifications via Dependeco or WhatsApp.
     router-link(to="create-post").grid-menu--entry.neu.extruded.small.clickable
       .entry
         | Lookup Value
