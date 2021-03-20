@@ -1,0 +1,62 @@
+{
+  "nameLabel": {
+    "component": "VrmTextDisplay",
+    "props": {
+      "text": "Name",
+      "type": "formLabel"
+    }
+  },
+  "name": {
+    "component": "VrmInput",
+    "props": {
+      "type": "text",
+      "classes": [
+        "neu",
+        "intruded",
+        "small",
+        "margin-medium",
+        "padding-wide",
+        "font-medium"
+      ]
+    }
+  },
+  "templateLabel": {
+    "component": "VrmTextDisplay",
+    "props": {
+      "text": "Template",
+      "type": "formLabel"
+    }
+  },
+  "template": {
+    "component": "VrmTextArea",
+    "props": {
+      "type": "text",
+      "classes": [
+        "neu",
+        "intruded",
+        "small",
+        "margin-medium",
+        "padding-wide",
+        "font-medium"
+      ]
+    }
+  },
+  "action:create": {
+    "component": "VrmButton",
+    "props": {
+      "label": "Create",
+      "classes": [
+        "colorful",
+        "neu",
+        "extruded",
+        "clickable",
+        "small",
+        "wide",
+        "margin-medium",
+        "padding-medium",
+        "justify-center",
+        "font-large"
+      ]
+    }
+  }
+}
