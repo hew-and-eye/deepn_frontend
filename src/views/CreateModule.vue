@@ -2,11 +2,14 @@
 .create-module
     vrm-root(:config="config", :data="vrmData" @vrmUpdate="onVrmUpdate")
     .suggestions(:style="suggestionsStyle")
-      div(v-for="suggestion in suggestions" @click="addSuggestion(suggestion)") {{ suggestion.name }}
+      div(v-for="suggestion in suggestions" @click="addSuggestion(suggestion)")
+        | {{ suggestion.name }}
+        div.suggestion-value "{{templateToValue(suggestion)}}"
 </template>
 <script>
 import createModuleSchema from "./vrmSchema/createModule.json";
 import { getHydratedConfig } from "@/components/VrmFramework/configManager";
+import templateToValue from "@/utils/templateToValue";
 import VrmRoot from "@/components/VrmFramework/VrmRoot";
 import StoreObject from "../store/StoreObject";
 const OPEN_DOUBLE_BRACE = /{{[^}}]*$/;
@@ -52,7 +55,7 @@ export default {
             "0":
               "Welcome to {{123456:0}}! This is a tool meant to help people easily maintain information",
           }),
-          dependencies: {},
+          dependencies: { "123456:0": "Deepn" },
         },
       ];
     },
@@ -66,7 +69,6 @@ export default {
         };
       },
       set({ top = 0, left = 0, display, marginLeft = 0 }) {
-        console.warn({ marginLeft });
         this.suggestionsTop = top + "px";
         this.suggestionsLeft = left + "px";
         this.suggestionsDisplay = display;
@@ -85,14 +87,16 @@ export default {
           marginLeft,
         };
       } else if (vrmEvent.template) {
-        console.warn("should hide");
         this.suggestionsStyle = { display: "none" };
       }
       if (vrmEvent["action:create"]) {
-        console.warn(this.module.value);
+        console.warn("this is where I would call the store");
       } else {
         this.module.addCommit(vrmEvent);
       }
+    },
+    templateToValue(suggestion) {
+      return templateToValue(suggestion);
     },
     addSuggestion(suggestion) {
       const latestVersion = suggestion.templates.length - 1;
@@ -155,15 +159,24 @@ function getCaretTopPoint() {
   display: flex
   flex-direction: column
   justify-content: flex-end
-  .suggestions
+  .suggestions, .suggestion-value
     position: fixed
     background: white
     border: 1px solid #6096fd
     padding: 6px
     border-radius: 6px
-    margin-top: 1em
+    margin-top: 1.2em
     div
       padding: 6px 4px
       cursor: pointer
       font-family: monospace
+      &:hover .suggestion-value
+        opacity: 1
+        margin-left: 0
+    .suggestion-value
+      filter: brightness(0.98)
+      opacity: 0
+      margin-left: -8px
+      pointer-events: none
+      transition: all 0.2s
 </style>
