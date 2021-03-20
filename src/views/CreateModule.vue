@@ -1,23 +1,23 @@
 <template lang="pug">
 .create-module
-    vrm-root(:config="config", :data="vrmData" @vrmUpdate="onVrmUpdate")
-    .suggestions(:style="suggestionsStyle")
-      div(v-for="suggestion in suggestions" @click="addSuggestion(suggestion)")
-        | {{ suggestion.name }}
-        div.suggestion-value "{{templateToValue(suggestion)}}"
+  vrm-root(:config="config", :data="vrmData" @vrmUpdate="onVrmUpdate")
+  .suggestions(:style="suggestionsStyle")
+    div(v-for="suggestion in suggestions" @click="addSuggestion(suggestion)")
+      | {{ suggestion.name }}
+      div.suggestion-value "{{templateToValue(suggestion)}}"
 </template>
 <script>
 import createModuleSchema from "./vrmSchema/createModule.json";
 import { getHydratedConfig } from "@/components/VrmFramework/configManager";
-import templateToValue from "@/utils/templateToValue";
+import { templateToValue, templateToNames } from "@/utils/templateToValue";
 import VrmRoot from "@/components/VrmFramework/VrmRoot";
-import StoreObject from "../store/StoreObject";
+import { mapState } from "vuex";
 const OPEN_DOUBLE_BRACE = /{{[^}}]*$/;
+const SUGGESTION_TAG_TEMPLATE = `<span class="suggestion-value">_</span>&nbsp;`;
 export default {
   components: { VrmRoot },
   data() {
     return {
-      module: new StoreObject({}),
       suggestionsTop: null,
       suggestionsLeft: null,
       suggestionsDisplay: "none",
@@ -29,35 +29,11 @@ export default {
       return getHydratedConfig(createModuleSchema);
     },
     vrmData() {
-      return this.module.value;
+      return this.newModule.value;
     },
+    ...mapState("modules", ["modules", "newModule"]),
     suggestions() {
-      return [
-        {
-          id: Math.floor(Math.random() * 1000000),
-          name: "Matthew's breakfast",
-          templates: Object.values({
-            "0":
-              "I am a sample module. Today Matthew ate an orange for breakfast",
-          }),
-          dependencies: {},
-        },
-        {
-          id: "123456",
-          name: "App name",
-          templates: Object.values({ "0": "Deepn", "1": "Dependeco" }),
-          dependencies: {},
-        },
-        {
-          id: Math.floor(Math.random() * 1000000),
-          name: "App description",
-          templates: Object.values({
-            "0":
-              "Welcome to {{123456:0}}! This is a tool meant to help people easily maintain information",
-          }),
-          dependencies: { "123456:0": "Deepn" },
-        },
-      ];
+      return Object.values(this.modules.value);
     },
     suggestionsStyle: {
       get() {
@@ -90,10 +66,49 @@ export default {
         this.suggestionsStyle = { display: "none" };
       }
       if (vrmEvent["action:create"]) {
-        console.warn("this is where I would call the store");
+        console.warn("this is where I would call the store", {
+          ...this.newModule.value,
+          templates: {
+            0: this.convertHTMLStringToTemplate(this.newModule.value.template),
+          },
+        });
       } else {
-        this.module.addCommit(vrmEvent);
+        this.newModule.addCommit(vrmEvent);
       }
+    },
+    convertTemplateToHTMLString(suggestion) {
+      return templateToNames(
+        suggestion,
+        SUGGESTION_TAG_TEMPLATE,
+        this.suggestions
+      );
+    },
+    handleModuleEdit(event) {
+      const templateValue = this.convertStringToTemplate(
+        event.target.innerHTML
+      );
+      this.$emit("vrmUpdate", templateValue);
+    },
+    convertHTMLStringToTemplate(htmlString) {
+      const { dependencies } = this.newModule.value;
+      Object.entries(dependencies || {}).forEach(([key]) => {
+        const modules = this.suggestions.reduce((acc, m) => {
+          acc[m.id] = m;
+          return acc;
+        }, {});
+        htmlString = htmlString.replace(
+          new RegExp(
+            SUGGESTION_TAG_TEMPLATE.replace(
+              "_",
+              modules[key.split(":")[0]].name,
+              "g"
+            ),
+            "g"
+          ),
+          `{{${key}}}`
+        );
+      });
+      return htmlString;
     },
     templateToValue(suggestion) {
       return templateToValue(suggestion);
@@ -101,12 +116,15 @@ export default {
     addSuggestion(suggestion) {
       const latestVersion = suggestion.templates.length - 1;
       const key = `${suggestion.id}:${latestVersion}`;
-      const template = this.module.value.template.replace(
+      const template = this.newModule.value.template.replace(
         OPEN_DOUBLE_BRACE,
         `{{${key}}}`
       );
       const dependencies = { [key]: suggestion.templates[latestVersion] };
-      this.module.addCommit({ template, dependencies });
+      this.newModule.addCommit({
+        template: this.convertTemplateToHTMLString({ template, dependencies }),
+        dependencies: { ...this.newModule.value.dependencies, ...dependencies },
+      });
       this.suggestionsStyle = { display: "none" };
     },
   },

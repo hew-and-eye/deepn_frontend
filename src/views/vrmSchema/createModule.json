@@ -28,7 +28,7 @@
     }
   },
   "template": {
-    "component": "VrmTextArea",
+    "component": "VrmModuleEditor",
     "props": {
       "type": "text",
       "classes": [

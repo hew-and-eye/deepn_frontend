@@ -1,4 +1,5 @@
 import { createStore } from "vuex";
+import modules from "./modules/modules";
 import users from "./modules/users";
 import tasks from "./modules/tasks";
 import whatsapp from "./modules/whatsapp";
@@ -13,5 +14,5 @@ export default createStore({
     },
   },
   actions: {},
-  modules: { users, tasks, whatsapp },
+  modules: { users, tasks, whatsapp, modules },
 });

@@ -1,8 +1,9 @@
 <template lang="pug">
-.vrm-tags.vrm-component(:class="{ hidden: !data }")
+.vrm-tags.vrm-component(:class="{ hidden: !data || !data.length }")
+  h3(v-if="label") {{label}} {{data}} 
   .vrm-tag.neu.extruded.small.padding-medium(v-for="tag in data")
-    | {{renderText(tag)}}
-    .x-button
+    | {{renderText(tag)}} {{tag}} {{renderKey}}
+    .x-button(v-if="removeButton")
 
 </template>
 <script>
@@ -13,6 +14,8 @@ export default {
     type: { type: String, default: "normal" },
     classesObject: { type: Object },
     renderKey: { type: String, default: "text" },
+    label: { type: String },
+    removeButton: { type: Boolean, default: true },
   },
   methods: {
     renderText(object) {

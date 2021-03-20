@@ -3,6 +3,7 @@ import VrmCheckbox from "./VrmCheckbox";
 import VrmDropdown from "./VrmDropdown";
 import VrmHorizontalLayout from "./VrmHorizontalLayout";
 import VrmInput from "./VrmInput";
+import VrmModuleEditor from "./VrmModuleEditor";
 import VrmSearch from "./VrmSearch";
 import VrmTags from "./VrmTags";
 import VrmTextArea from "./VrmTextArea";
@@ -14,6 +15,7 @@ export default {
   VrmDropdown,
   VrmHorizontalLayout,
   VrmInput,
+  VrmModuleEditor,
   VrmSearch,
   VrmTags,
   VrmTextArea,
