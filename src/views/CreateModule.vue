@@ -11,7 +11,7 @@ import createModuleSchema from "./vrmSchema/createModule.json";
 import { getHydratedConfig } from "@/components/VrmFramework/configManager";
 import { templateToValue, templateToNames } from "@/utils/templateToValue";
 import VrmRoot from "@/components/VrmFramework/VrmRoot";
-import { mapState } from "vuex";
+import { mapActions, mapState } from "vuex";
 const OPEN_DOUBLE_BRACE = /{{[^}}]*$/;
 const SUGGESTION_TAG_TEMPLATE = `<span class="suggestion-value">_</span>&nbsp;`;
 export default {
@@ -53,6 +53,7 @@ export default {
     },
   },
   methods: {
+    ...mapActions("modules", ["createModule"]),
     onVrmUpdate(vrmEvent) {
       if (vrmEvent.template?.match(OPEN_DOUBLE_BRACE)) {
         const marginLeft =
@@ -66,12 +67,16 @@ export default {
         this.suggestionsStyle = { display: "none" };
       }
       if (vrmEvent["action:create"]) {
-        console.warn("this is where I would call the store", {
+        const newModule = {
           ...this.newModule.value,
           templates: {
             0: this.convertHTMLStringToTemplate(this.newModule.value.template),
           },
-        });
+          reactions: {}, // name, owner, dependencies, templates, reactions
+        };
+        delete newModule.template;
+        console.warn(newModule);
+        this.createModule(newModule);
       } else {
         this.newModule.addCommit(vrmEvent);
       }

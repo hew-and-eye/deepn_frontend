@@ -19,5 +19,9 @@
   },
   "iot": {
     "get": "https://qjb9nqwp0i.execute-api.eu-central-1.amazonaws.com/dev/iot-presigned-url"
+  },
+  "modules": {
+    "create": "https://rwcixqf98l.execute-api.eu-central-1.amazonaws.com/dev/create-module",
+    "find": "https://rwcixqf98l.execute-api.eu-central-1.amazonaws.com/dev/find-modules"
   }
 }
