@@ -1,41 +1,9 @@
 import BackendClient from "../BackendClient";
 import StoreObject from "../StoreObject";
-// import get from "lodash.get";
 const moduleService = new BackendClient("modules");
-// const dummyModules = [
-//   {
-//     id: Math.floor(Math.random() * 1000000),
-//     name: "Matthew's breakfast",
-//     templates: Object.values({
-//       "0": "I am a sample module. Today Matthew ate an orange for breakfast",
-//     }),
-//     dependencies: {},
-//   },
-//   {
-//     id: "123456",
-//     name: "App name",
-//     templates: Object.values({ "0": "Deepn", "1": "Dependeco" }),
-//     dependencies: {},
-//   },
-//   {
-//     id: Math.floor(Math.random() * 1000000),
-//     name: "App description",
-//     templates: Object.values({
-//       "0":
-//         "Welcome to {{123456:0}}! This is a tool meant to help people easily maintain information",
-//     }),
-//     dependencies: { "123456:0": "Deepn" },
-//   },
-// ];
 export default {
   namespaced: true,
   state: {
-    // modules: new StoreObject(
-    //   dummyModules.reduce((acc, m) => {
-    //     acc[m.id] = m;
-    //     return acc;
-    //   }, {})
-    // ),
     modules: new StoreObject({}),
     newModule: new StoreObject({}),
   },
@@ -58,14 +26,24 @@ export default {
         Authorization: `Bearer ${rootState.accessToken}`,
       };
       const response = await moduleService.find({ headers });
-      console.warn(response);
-      commit("setModules", response.data);
+      let parsedData = response.data.map((d) => ({
+        ...d,
+        templates: JSON.parse(d.templates),
+      }));
+      parsedData = Object.values(parsedData).reduce((acc, val) => {
+        acc[val.id] = val;
+        return acc;
+      }, {});
+      console.log({ response, parsedData });
+      commit("setModules", parsedData);
     },
     async createModule({ commit }, data) {
       data.owner = window.localStorage.getItem("username");
+      if (!data.dependencies) {
+        data.dependencies = {};
+      }
       const response = await moduleService.create({ data });
-      console.warn(response);
-      data.id = data.result.id;
+      data.id = response.data.result.id;
       commit("setModules", data);
     },
   },

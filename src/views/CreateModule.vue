@@ -1,7 +1,7 @@
 <template lang="pug">
 .create-module
   vrm-root(:config="config", :data="vrmData" @vrmUpdate="onVrmUpdate")
-  .suggestions(:style="suggestionsStyle")
+  .suggestions(:style="suggestionsStyle" v-if="suggestions && suggestions.length")
     div(v-for="suggestion in suggestions" @click="addSuggestion(suggestion)")
       | {{ suggestion.name }}
       div.suggestion-value "{{templateToValue(suggestion)}}"
@@ -52,8 +52,11 @@ export default {
       },
     },
   },
+  mounted() {
+    this.findModules();
+  },
   methods: {
-    ...mapActions("modules", ["createModule"]),
+    ...mapActions("modules", ["createModule", "findModules"]),
     onVrmUpdate(vrmEvent) {
       if (vrmEvent.template?.match(OPEN_DOUBLE_BRACE)) {
         const marginLeft =
@@ -119,7 +122,7 @@ export default {
       return templateToValue(suggestion);
     },
     addSuggestion(suggestion) {
-      const latestVersion = suggestion.templates.length - 1;
+      const latestVersion = Object.keys(suggestion.templates).length - 1;
       const key = `${suggestion.id}:${latestVersion}`;
       const template = this.newModule.value.template.replace(
         OPEN_DOUBLE_BRACE,

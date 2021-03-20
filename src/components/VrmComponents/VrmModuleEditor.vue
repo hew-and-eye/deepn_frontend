@@ -33,8 +33,10 @@ export default {
     ...mapState("modules", ["modules", "newModule"]),
     previewText() {
       const template = this.convertHTMLStringToTemplate(this.data);
-      console.warn(this.data, this.newModule, template);
-      return templateToValue({ ...this.newModule.value, template });
+      return templateToValue({
+        ...this.newModule.value,
+        templates: { 0: template },
+      });
     },
   },
   watch: {
@@ -66,7 +68,6 @@ export default {
   },
   methods: {
     emitVrmEvent(event) {
-      console.warn(event.target.innerHTML);
       this.$emit("vrmUpdate", event.target.innerHTML);
     },
     toggleView() {
@@ -75,7 +76,6 @@ export default {
     convertHTMLStringToTemplate(htmlString) {
       const { dependencies } = this.newModule.value;
       Object.entries(dependencies || {}).forEach(([key]) => {
-        console.warn("key time", key);
         htmlString = htmlString.replace(
           new RegExp(
             SUGGESTION_TAG_TEMPLATE.replace(
