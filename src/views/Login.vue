@@ -54,8 +54,8 @@ export default {
     background: #eaeafa
     z-index: 1
   .login-form--wrapper
-    min-width: 600px
-    max-width: 90vw
+    min-width: 30vw
+    max-width: calc(90vw - 50px)
     position: relative
     z-index: 2
     padding: 20px
