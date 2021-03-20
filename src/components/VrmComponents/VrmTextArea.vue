@@ -1,9 +1,9 @@
 <template lang="pug">
 .vrm-textarea.vrm-component
-  textarea(
-    :value="data"
+  div(
+    contenteditable=true
     @input="emitVrmEvent"
-  )
+  ) {{data}}
 </template>
 <script>
 export default {
@@ -14,7 +14,7 @@ export default {
   },
   methods: {
     emitVrmEvent(event) {
-      this.$emit("vrmUpdate", event.target.value);
+      this.$emit("vrmUpdate", event.target.innerText);
     },
   },
 };
@@ -31,4 +31,6 @@ export default {
     font-size: inherit
     font: inherit
     resize: vertical
+  div
+    outline: none
 </style>

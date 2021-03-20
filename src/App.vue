@@ -1,15 +1,17 @@
 <template lang="pug">
 #app
   .app-header.neu
-    logo.neu.extruded.small
+    logo.logo.neu.extruded.small
     .app-title Dependeco
   content-wrapper(:layout="navbarPosition")
     router-view(v-slot:main)
     template(v-slot:nav v-if="isLoggedIn")
-      router-button(to="Home")
-      router-button(to="Feed")
-      router-button(to="Create")
-      router-button(to="Tasks")
+      //- router-button(to="Home")
+      //- router-button(to="Feed")
+      //- router-button(to="Create")
+      //- router-button(to="Tasks")
+      router-button(to="CreateModule" label="Create")
+      router-button(to="FindModules" label="Find")
 </template>
 <script>
 import ContentWrapper from "@/components/ContentWrapper";
@@ -161,12 +163,26 @@ body,
   align-items: center;
   padding-top: 12px;
 }
+.content-wrapper {
+  flex: 1;
+}
+</style>
+<style scoped>
+@media screen and (max-device-width: 768px) {
+  .app-header .app-title {
+    font-size: 10pt;
+    margin-left: 10px;
+    font-weight: bold;
+  }
+  .logo {
+    height: 18px;
+    width: 18px;
+    margin-left: -8px;
+  }
+}
 .app-title {
   font-size: 18pt;
   display: flex;
-  margin-left: 30px;
-}
-.content-wrapper {
-  flex: 1;
+  margin-left: 24px;
 }
 </style>

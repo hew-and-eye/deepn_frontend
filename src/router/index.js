@@ -32,6 +32,24 @@ const routes = [
       import(/* webpackChunkName: "task" */ "../views/Tasks.vue"),
   },
   {
+    path: "/create-module",
+    name: "CreateModule",
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () =>
+      import(/* webpackChunkName: "create" */ "../views/CreateModule.vue"),
+  },
+  {
+    path: "/find-modules",
+    name: "FindModules",
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () =>
+      import(/* webpackChunkName: "create" */ "../views/FindModules.vue"),
+  },
+  {
     path: "/create",
     name: "Create",
     // route level code-splitting
