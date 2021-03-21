@@ -1,6 +1,6 @@
 <template lang="pug">
 .vrm-module-editor.vrm-component
-  div(
+  .editor(
     v-show="!previewMode"
     ref="editor"
     contenteditable=true
@@ -10,6 +10,7 @@
   vrm-button.toggle-btn.neu.extruded.clickable.small.padding-medium(
     :label="previewMode ? 'Edit' : 'Preview'" style="float: right;"
     @vrmUpdate="toggleView"
+    v-if="data?.includes('<span')"
   )
 </template>
 <script>
@@ -39,10 +40,13 @@ export default {
       });
     },
   },
+  mounted() {
+    this.$refs.editor.innerHTML = this.data || "";
+  },
   watch: {
     data: {
       handler() {
-        this.$refs.editor.innerHTML = this.data;
+        this.$refs.editor.innerHTML = this.data || "";
         setEndOfContenteditable(this.$refs.editor);
         // From StackOverflow
         function setEndOfContenteditable(contentEditableElement) {
@@ -71,7 +75,6 @@ export default {
       this.$emit("vrmUpdate", event.target.innerHTML);
     },
     toggleView() {
-      console.log(this.convertHTMLStringToTemplate(this.data));
       this.previewMode = !this.previewMode;
     },
     convertHTMLStringToTemplate(htmlString) {
@@ -96,6 +99,7 @@ export default {
 </script>
 <style lang="sass" scoped>
 .vrm-module-editor
+  position: relative
   textarea
     background: none
     border: none
@@ -106,8 +110,11 @@ export default {
     font-size: inherit
     font: inherit
     resize: vertical
-  div
+  .editor
     outline: none
+    min-height: 50px
+  .toggle-button
+    min-height: none !important
 </style>
 <style lang="sass">
 .vrm-module-editor

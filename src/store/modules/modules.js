@@ -1,5 +1,7 @@
+import { templateToNames } from "../../utils/templateToValue";
 import BackendClient from "../BackendClient";
 import StoreObject from "../StoreObject";
+const SUGGESTION_TAG_TEMPLATE = `<span class="suggestion-value">_</span>&nbsp;`;
 const moduleService = new BackendClient("modules");
 export default {
   namespaced: true,
@@ -17,6 +19,16 @@ export default {
       state.modules.addCommit(value);
     },
     setNewModule(state, value) {
+      state.newModule = new StoreObject(value);
+    },
+    setEditModule(state, value) {
+      // const templateArray = Object.values(value.templates);
+      // const lastTemplate = templateArray[templateArray.length - 1];
+      value.template = templateToNames(
+        value,
+        SUGGESTION_TAG_TEMPLATE,
+        Object.values(state.modules.value)
+      );
       state.newModule = new StoreObject(value);
     },
   },
@@ -38,21 +50,19 @@ export default {
           },
           {}
         );
-        console.log(val.dependencies);
         acc[val.id] = val;
         return acc;
       }, {});
-      console.log({ response, parsedData });
       commit("setModules", parsedData);
     },
-    async createModule({ commit }, data) {
+    async createModule({ commit, dispatch }, data) {
       data.owner = window.localStorage.getItem("username");
       if (!data.dependencies) {
         data.dependencies = {};
       }
       const response = await moduleService.create({ data });
       data.id = response.data.result.id;
-      commit("setModules", data);
+      dispatch("findModules");
       commit("setNewModule", {});
     },
   },

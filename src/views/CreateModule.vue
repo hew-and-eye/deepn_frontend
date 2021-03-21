@@ -29,6 +29,7 @@ export default {
       return getHydratedConfig(createModuleSchema);
     },
     vrmData() {
+      console.log(this.newModule.value.id);
       return this.newModule.value;
     },
     ...mapState("modules", ["modules", "newModule"]),
@@ -70,10 +71,16 @@ export default {
         this.suggestionsStyle = { display: "none" };
       }
       if (vrmEvent["action:create"]) {
+        const newIndex = Object.keys(this.newModule.value.templates || {})
+          .length;
+        console.log("using index", newIndex);
         const newModule = {
           ...this.newModule.value,
           templates: {
-            0: this.convertHTMLStringToTemplate(this.newModule.value.template),
+            ...this.newModule.value.templates,
+            [newIndex]: this.convertHTMLStringToTemplate(
+              this.newModule.value.template
+            ),
           },
           reactions: {}, // name, owner, dependencies, templates, reactions
         };
@@ -183,6 +190,7 @@ function getCaretTopPoint() {
 <style lang="sass" scoped>
 .create-module
   display: flex
+  padding: 4em
   flex-direction: column
   justify-content: flex-end
   .suggestions, .suggestion-value

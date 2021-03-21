@@ -1,5 +1,5 @@
 <template>
-  <svg
+  <!-- <svg
     class="logo"
     height="300px"
     width="300px"
@@ -27,12 +27,13 @@
         ry="19.685"
       ></ellipse>
     </g>
-  </svg>
+  </svg> -->
+  <img src="https://i.imgur.com/euP3SFo.png" />
 </template>
 <style lang="sass" scoped>
 .logo
   border-radius: 300px !important
-  height: 30px
-  width: 30px
+  height: 35px
+  width: 35px
   padding: 6px
 </style>

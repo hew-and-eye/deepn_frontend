@@ -4,13 +4,11 @@ export function templateToValue(module, template = "_") {
   const latestTemplate =
     templatesArray[templatesArray.length - 1] || module.template;
   let returnString = latestTemplate || "";
-  console.log(module.dependencies);
   Object.entries(module.dependencies || {}).forEach(([key, value]) => {
     returnString = returnString.replace(
       new RegExp(`{{${key}}}`, "g"),
       template.replace("_", value)
     );
-    console.log(returnString, key, value);
   });
   return returnString;
 }
