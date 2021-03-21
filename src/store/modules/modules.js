@@ -45,6 +45,17 @@ export default {
       parsedData = Object.values(parsedData).reduce((acc, val) => {
         val.dependencies = Object.entries(val.dependencies).reduce(
           (acc, [key, val]) => {
+            const [id, version] = key.split(":");
+            const dependency = parsedData.find((d) => d.id === id);
+            const latestModuleVersion =
+              Object.keys(dependency.templates).length - 1;
+            if (version < latestModuleVersion) {
+              if (!acc.outdated) {
+                acc.outdated = {};
+              }
+              acc.outdated[key] = true;
+              console.log(acc);
+            }
             acc[key] = val["S"];
             return acc;
           },
