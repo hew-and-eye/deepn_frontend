@@ -167,6 +167,7 @@ export default {
     .module-card--value
       margin: 6px 10px
       flex: 1 1
+      overflow: auto
     .module-card--footer
       align-self: flex-end
       margin: 6px 10px
@@ -242,8 +243,6 @@ export default {
         align-items: center
       .module-card
         height: 180px
-        .module-card--value
-          overflow: auto
   .up-arrow
     height: 32px
     width: 32px
