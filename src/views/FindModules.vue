@@ -8,7 +8,10 @@
       .module-card--name.neu.extruded.small {{ module.name }}
       .module-card--value: span(v-html="getTemplateValue(module)")
       .module-card--footer
-        .outdated.neu.extruded.tiny.padding-small(v-if="hasOutdatedDependencies(module)") !
+        .outdated.neu.extruded.tiny.padding-small(
+          v-if="hasOutdatedDependencies(module)"
+        ) !
+          .outdated-popover This module has outdated dependencies
         a.edit-button(
           href="/"
           v-if="isOwner(module)"
@@ -34,6 +37,7 @@
           .module-card--value: span(v-html="getTemplateValue(module)")
           .module-card--footer
             .outdated.neu.extruded.tiny.padding-small(v-if="hasOutdatedDependencies(module)") !
+              .outdated-popover This module has outdated dependencies
             a.edit-button(
               href="/"
               v-if="isOwner(module)"
@@ -52,6 +56,7 @@
           .module-card--value: span(v-html="getTemplateValue(dependencyLayers.current)")
           .module-card--footer
             .outdated.neu.extruded.tiny.padding-small(v-if="hasOutdatedDependencies(dependencyLayers.current)") !
+              .outdated-popover This module has outdated dependencies
             a.edit-button(
               href="/"
               v-if="isOwner(dependencyLayers.current)"
@@ -73,6 +78,7 @@
           .module-card--value: span(v-html="getTemplateValue(module)")
           .module-card--footer
             .outdated.neu.extruded.tiny.padding-small(v-if="hasOutdatedDependencies(module)") !
+              .outdated-popover This module has outdated dependencies
             a.edit-button(
               href="/"
               v-if="isOwner(module)"
@@ -178,6 +184,24 @@ export default {
         display: inline-flex
         align-items: center
         justify-content: center
+        position: relative
+        cursor: pointer
+        &:hover .outdated-popover
+          opacity: 1
+          top: 28px
+        .outdated-popover
+          pointer-events: none
+          opacity: 0
+          transition: all 0.2s
+          background: white
+          border: 1px solid #6096fd
+          padding: 6px
+          border-radius: 6px
+          position: absolute
+          width: auto
+          white-space: nowrap
+          top: 24px
+          z-index: 1
   .dependency-view
     display: flex
     position: relative
