@@ -201,6 +201,8 @@ function getCaretTopPoint() {
     padding: 6px
     border-radius: 6px
     margin-top: 1.2em
+    max-height: 300px
+    overflow: auto
     div
       padding: 6px 4px
       cursor: pointer

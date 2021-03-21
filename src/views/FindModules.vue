@@ -1,8 +1,10 @@
 <template lang="pug">
 .find-modules
+  .search-bar
+    input.search.neu.intruded.tiny.padding-medium(v-model="search" placeholder="Search")
   .grid-view(v-if="gridView")
     .module-card.neu.extruded.small.padding-medium(
-      v-for="module in modulesArray"
+      v-for="module in filteredModulesArray"
       @click="searchDependencies(module)"
     )
       .module-card--name.neu.extruded.small {{ module.name }}
@@ -97,6 +99,7 @@ export default {
     return {
       gridView: true,
       viewHistory: [],
+      search: null,
     };
   },
   mounted() {
@@ -106,6 +109,19 @@ export default {
     ...mapState("modules", ["modules", "dependencyLayers"]),
     modulesArray() {
       return Object.values(this.modules.value);
+    },
+    filteredModulesArray() {
+      if (!this.search) {
+        return this.modulesArray;
+      }
+      return this.modulesArray.filter((module) => {
+        return (
+          JSON.stringify(module.templates).includes(this.search) ||
+          JSON.stringify(module.dependencies).includes(this.search) ||
+          module.name.includes(this.search) ||
+          module.owner.includes(this.search)
+        );
+      });
     },
   },
   methods: {
@@ -247,6 +263,14 @@ export default {
     height: 32px
     width: 32px
     transform: rotate(-90deg)
+  .search-bar
+    display: flex
+    justify-content: center
+    .search
+      outline: none
+      border: none
+      min-width: 30vw
+      padding: 12px 18px
 </style>
 <style>
 ::-webkit-scrollbar-track {
