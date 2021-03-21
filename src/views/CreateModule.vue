@@ -2,8 +2,8 @@
 .create-module
   h3 Create/Combine some knowledge
   vrm-root(:config="config", :data="vrmData" @vrmUpdate="onVrmUpdate")
-  .suggestions(:style="suggestionsStyle" v-if="suggestions && suggestions.length")
-    div(v-for="suggestion in suggestions" @click="addSuggestion(suggestion)")
+  .suggestions(:style="suggestionsStyle" v-if="filteredSuggestions && filteredSuggestions.length")
+    div(v-for="suggestion in filteredSuggestions" @click="addSuggestion(suggestion)")
       | {{ suggestion.name }}
       div.suggestion-value "{{templateToValue(suggestion)}}"
 </template>
@@ -23,6 +23,7 @@ export default {
       suggestionsLeft: null,
       suggestionsDisplay: "none",
       suggestionsMarginLeft: null,
+      suggestionsFilter: "",
     };
   },
   computed: {
@@ -36,6 +37,14 @@ export default {
     ...mapState("modules", ["modules", "newModule"]),
     suggestions() {
       return Object.values(this.modules.value);
+    },
+    filteredSuggestions() {
+      if (!this.suggestionsFilter) {
+        return this.suggestions;
+      }
+      return this.suggestions.filter((s) =>
+        s.name.toLowerCase().includes(this.suggestionsFilter.toLowerCase())
+      );
     },
     suggestionsStyle: {
       get() {
@@ -61,6 +70,9 @@ export default {
     ...mapActions("modules", ["createModule", "findModules"]),
     onVrmUpdate(vrmEvent) {
       if (vrmEvent.template?.match(OPEN_DOUBLE_BRACE)) {
+        this.suggestionsFilter = vrmEvent.template
+          .match(OPEN_DOUBLE_BRACE)[0]
+          .replace("{{", "");
         const marginLeft =
           vrmEvent.template?.match(OPEN_DOUBLE_BRACE)[0].length * 6;
         this.suggestionsStyle = {
