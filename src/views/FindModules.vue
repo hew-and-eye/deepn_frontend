@@ -1,25 +1,26 @@
 <template lang="pug">
 .find-modules
-  .search-bar
-    input.search.neu.intruded.tiny.padding-medium(v-model="search" placeholder="Search")
-  .grid-view(v-if="gridView")
-    .module-card.neu.extruded.small.padding-medium(
-      v-for="module in filteredModulesArray"
-      @click="searchDependencies(module)"
-    )
-      .module-card--name.neu.extruded.small {{ module.name }}
-      .module-card--value: span(v-html="getTemplateValue(module)")
-      .module-card--footer
-        .outdated.neu.extruded.tiny.padding-small(
-          v-if="hasOutdatedDependencies(module)"
-        ) !
-          .outdated-popover This module has outdated dependencies
-        a.edit-button(
-          href="/"
-          v-if="isOwner(module)"
-          @click.prevent="editModule(module)"
-        ) Edit
-        | {{ module.owner }}
+  template(v-if="gridView")
+    .search-bar
+      input.search.neu.intruded.tiny.padding-medium(v-model="search" placeholder="Search")
+    .grid-view(v-if="gridView")
+      .module-card.neu.extruded.small.padding-medium(
+        v-for="module in filteredModulesArray"
+        @click="searchDependencies(module)"
+      )
+        .module-card--name.neu.extruded.small {{ module.name }}
+        .module-card--value: span(v-html="getTemplateValue(module)")
+        .module-card--footer
+          .outdated.neu.extruded.tiny.padding-small(
+            v-if="hasOutdatedDependencies(module)"
+          ) !
+            .outdated-popover This module has outdated dependencies
+          a.edit-button(
+            href="/"
+            v-if="isOwner(module)"
+            @click.prevent="editModule(module)"
+          ) Edit
+          | {{ module.owner }}
   .dependency-view(v-else)
     a.close-button(@click.prevent="gridView = true; viewHistory = []" href="/") close
     .side-panel.neu.intruded.small.padding-medium

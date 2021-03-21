@@ -30,7 +30,9 @@ export default {
         const [action, payload] = actionEvent;
         await this[action.replace("action:", "")](payload);
         if (this.isLoggedIn) {
-          this.$router.push({ name: this.$route.query.redirect || "Feed" });
+          this.$router.push({
+            name: this.$route.query.redirect || "FindModules",
+          });
         }
       }
     },
