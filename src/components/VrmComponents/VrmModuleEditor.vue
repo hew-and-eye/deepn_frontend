@@ -17,7 +17,7 @@
 import VrmButton from "@/components/VrmComponents/VrmButton";
 import { templateToValue } from "@/utils/templateToValue";
 import { mapState } from "vuex";
-const SUGGESTION_TAG_TEMPLATE = `<span class="suggestion-value">_</span>&nbsp;`;
+const SUGGESTION_TAG_TEMPLATE = `<span class="suggestion-value">_</span>&nbsp;&nbsp;`;
 export default {
   components: { VrmButton },
   props: {

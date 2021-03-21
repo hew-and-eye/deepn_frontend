@@ -14,7 +14,7 @@ import { templateToValue, templateToNames } from "@/utils/templateToValue";
 import VrmRoot from "@/components/VrmFramework/VrmRoot";
 import { mapActions, mapState } from "vuex";
 const OPEN_DOUBLE_BRACE = /{{[^}}]*$/;
-const SUGGESTION_TAG_TEMPLATE = `<span class="suggestion-value">_</span>&nbsp;`;
+const SUGGESTION_TAG_TEMPLATE = `<span class="suggestion-value">_</span>&nbsp;&nbsp;`;
 export default {
   components: { VrmRoot },
   data() {

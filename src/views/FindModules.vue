@@ -23,7 +23,7 @@
     .side-panel.neu.intruded.small.padding-medium
       .history
         h3 Visited
-        .visited-module.module-card--name.neu.extruded.small.clickable(
+        .visited-module.module-card--name.neu.extruded.small(
           v-for="module in viewHistory"
         ) {{ module.name }}
     .main-panel

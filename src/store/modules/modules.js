@@ -1,7 +1,7 @@
 import { templateToNames } from "../../utils/templateToValue";
 import BackendClient from "../BackendClient";
 import StoreObject from "../StoreObject";
-const SUGGESTION_TAG_TEMPLATE = `<span class="suggestion-value">_</span>&nbsp;`;
+const SUGGESTION_TAG_TEMPLATE = `<span class="suggestion-value">_</span>&nbsp;&nbsp;`;
 const moduleService = new BackendClient("modules");
 export default {
   namespaced: true,
