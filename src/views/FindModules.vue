@@ -22,7 +22,6 @@
         h3 Visited
         .visited-module.module-card--name.neu.extruded.small.clickable(
           v-for="module in viewHistory"
-          @click="searchDependencies(module)"
         ) {{ module.name }}
     .main-panel
       .imported-by
