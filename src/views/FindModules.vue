@@ -229,6 +229,7 @@ export default {
       position: absolute
       top: 10px
       right: 10px
+      z-index: 1
     .side-panel
       h3
         margin-top: 0.3em
