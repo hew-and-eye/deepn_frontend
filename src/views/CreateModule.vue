@@ -1,5 +1,6 @@
 <template lang="pug">
 .create-module
+  h3 Create/Combine some knowledge
   vrm-root(:config="config", :data="vrmData" @vrmUpdate="onVrmUpdate")
   .suggestions(:style="suggestionsStyle" v-if="suggestions && suggestions.length")
     div(v-for="suggestion in suggestions" @click="addSuggestion(suggestion)")

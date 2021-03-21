@@ -1,13 +1,76 @@
 <template lang="pug">
 .find-modules
-  .module-card.neu.extruded.small.padding-medium(v-for="module in modulesArray")
-    .module-card--name.neu.extruded.small {{ module.name }}
-    .module-card--value: span(v-html="getTemplateValue(module)")
-    .module-card--footer
-      .outdated.neu.extruded.tiny.padding-small(v-if="hasOutdatedDependencies(module)") !
-      vrm-button.edit-button.neu.extruded.clickable.tiny.padding-medium(label="Edit" v-if="isOwner(module)" @vrmUpdate="editModule(module)")
-      | {{ module.owner }}
-  
+  .grid-view(v-if="gridView")
+    .module-card.neu.extruded.small.padding-medium(
+      v-for="module in modulesArray"
+      @click="searchDependencies(module)"
+    )
+      .module-card--name.neu.extruded.small {{ module.name }}
+      .module-card--value: span(v-html="getTemplateValue(module)")
+      .module-card--footer
+        .outdated.neu.extruded.tiny.padding-small(v-if="hasOutdatedDependencies(module)") !
+        a.edit-button(
+          href="/"
+          v-if="isOwner(module)"
+          @click.prevent="editModule(module)"
+        ) Edit
+        | {{ module.owner }}
+  .dependency-view(v-else)
+    a.close-button(@click.prevent="gridView = true; viewHistory = []" href="/") close
+    .side-panel.neu.intruded.small.padding-medium
+      .history
+        h3 Visited
+        .visited-module.module-card--name.neu.extruded.small.clickable(
+          v-for="module in viewHistory"
+          @click="searchDependencies(module)"
+        ) {{ module.name }}
+    .main-panel
+      .imported-by
+        .module-card.neu.extruded.small.padding-medium(
+          v-for="module in toValues(dependencyLayers.importedBy)"
+          @click="searchDependencies(module)"
+          v-if="toValues(dependencyLayers.importedBy).length"
+        )
+          .module-card--name.neu.extruded.small {{ module.name }}
+          .module-card--value: span(v-html="getTemplateValue(module)")
+          .module-card--footer
+            .outdated.neu.extruded.tiny.padding-small(v-if="hasOutdatedDependencies(module)") !
+            a.edit-button(
+              href="/"
+              v-if="isOwner(module)"
+              @click.prevent="editModule(module)"
+            ) Edit
+            | {{ module.owner }}
+        .empty-layer(v-else) This module is not imported anywhere
+      .current
+        .module-card.neu.extruded.medium.padding-medium
+          .module-card--name.neu.extruded.small {{ dependencyLayers.current.name }}
+          .module-card--value: span(v-html="getTemplateValue(dependencyLayers.current)")
+          .module-card--footer
+            .outdated.neu.extruded.tiny.padding-small(v-if="hasOutdatedDependencies(dependencyLayers.current)") !
+            a.edit-button(
+              href="/"
+              v-if="isOwner(dependencyLayers.current)"
+              @click.prevent="editModule(dependencyLayers.current)"
+            ) Edit
+            | {{ dependencyLayers.current.owner }}
+      .imports
+        .module-card.neu.extruded.small.padding-medium(
+          v-for="module in toValues(dependencyLayers.imports)"
+          @click="searchDependencies(module)"
+          v-if="toValues(dependencyLayers.imports).length"
+        )
+          .module-card--name.neu.extruded.small {{ module.name }}
+          .module-card--value: span(v-html="getTemplateValue(module)")
+          .module-card--footer
+            .outdated.neu.extruded.tiny.padding-small(v-if="hasOutdatedDependencies(module)") !
+            a.edit-button(
+              href="/"
+              v-if="isOwner(module)"
+              @click.prevent="editModule(module)"
+            ) Edit
+            | {{ module.owner }}
+        .empty-layer(v-else) This module does not import anything
 </template>
 <script>
 import { mapActions, mapMutations, mapState } from "vuex";
@@ -15,17 +78,24 @@ import { templateToValue } from "@/utils/templateToValue";
 import VrmButton from "@/components/VrmComponents/VrmButton";
 export default {
   components: { VrmButton },
+  data() {
+    return {
+      gridView: true,
+      viewHistory: [],
+    };
+  },
   mounted() {
     this.findModules();
   },
   computed: {
-    ...mapState("modules", ["modules"]),
+    ...mapState("modules", ["modules", "dependencyLayers"]),
     modulesArray() {
       return Object.values(this.modules.value);
     },
   },
   methods: {
     ...mapActions("modules", ["findModules"]),
+    ...mapMutations("modules", ["setEditModule", "initializeDependencyView"]),
     getTemplateValue(module) {
       return templateToValue(module);
     },
@@ -35,10 +105,17 @@ export default {
     hasOutdatedDependencies(module) {
       return module.dependencies.outdated;
     },
-    ...mapMutations("modules", ["setEditModule"]),
     editModule(module) {
       this.setEditModule(module);
       this.$router.push("create-module");
+    },
+    searchDependencies(module) {
+      this.initializeDependencyView(module);
+      this.viewHistory.push(module);
+      this.gridView = false;
+    },
+    toValues(modulesObject) {
+      return Object.values(modulesObject);
     },
   },
 };
@@ -46,8 +123,20 @@ export default {
 <style lang="sass" scoped>
 .find-modules
   padding: 1em
-  display: flex
-  flex-wrap: wrap
+  height: 100%
+  box-sizing: border-box
+  .grid-view
+    display: flex
+    flex-wrap: wrap
+  a
+    color: #333
+  .module-card--name
+    padding: 6px 10px
+    top: 12px
+    font-weight: bold
+    border-radius: 5px
+    background: #aac
+    font-size: 14pt
   .module-card
     width: 400px
     height: 300px
@@ -59,19 +148,15 @@ export default {
     flex-direction: column
     .module-card--name
       margin-left: -20px
-      padding: 6px 10px
-      top: 12px
-      font-weight: bold
       position: absolute
-      border-radius: 50px
-      background: #aac
-      font-size: 14pt
     .module-card--value
       margin: 6px 10px
-      flex: 1
+      flex: 1 1
     .module-card--footer
       align-self: flex-end
       margin: 6px 10px
+      flex-shrink: 0
+      flex-basis: auto
       .edit-button
         margin-right: 10px
       .outdated
@@ -84,6 +169,45 @@ export default {
         display: inline-flex
         align-items: center
         justify-content: center
+  .dependency-view
+    display: flex
+    position: relative
+    overflow: hidden
+    height: 100%
+    .close-button
+      position: absolute
+      top: 10px
+      right: 10px
+    .side-panel
+      h3
+        margin-top: 0.3em
+      padding: 0.5em 1em
+      .module-card--name
+        margin: 8px 0
+    .main-panel
+      flex: 1 1
+      overflow: hidden
+      display: flex
+      flex-direction: column
+      .empty-layer
+        display: flex
+        flex: 1
+        justify-content: center
+        align-items: center
+        text-align: center
+        min-height: 100px
+      .imported-by, .imports, .current
+        display: flex
+        flex: 1
+        justify-content: center
+        overflow-x: auto
+      .current
+        flex: 1.2
+        align-items: center
+      .module-card
+        height: 180px
+        .module-card--value
+          overflow: auto
 </style>
 <style>
 ::-webkit-scrollbar-track {

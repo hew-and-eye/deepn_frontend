@@ -8,6 +8,11 @@ export default {
   state: {
     modules: new StoreObject({}),
     newModule: new StoreObject({}),
+    dependencyLayers: {
+      current: null,
+      imports: {},
+      importedBy: {},
+    },
   },
   getters: {
     accessToken({ rootState }) {
@@ -30,6 +35,26 @@ export default {
         Object.values(state.modules.value)
       );
       state.newModule = new StoreObject(value);
+    },
+    initializeDependencyView(state, module) {
+      state.dependencyLayers.current = module;
+      state.dependencyLayers.imports = Object.keys(module.dependencies).reduce(
+        (acc, dependency) => {
+          const [id] = dependency.split(":");
+          acc[id] = state.modules.value[id];
+          return acc;
+        },
+        {}
+      );
+      state.dependencyLayers.importedBy = Object.values(
+        state.modules.value
+      ).reduce((acc, m) => {
+        if (JSON.stringify(m.dependencies).includes(module.id)) {
+          acc[m.id] = m;
+          console.log("yaya");
+        }
+        return acc;
+      }, {});
     },
   },
   actions: {
